@@ -1,5 +1,13 @@
 import hashlib
 
-def calculate(* args):
-    return hashlib.sha256(" ".join([str(arg) for arg in args if arg is not None])).hexdigest()
+def transform_arg(arg):
+    if arg is None:
+        return ""
+    return str(arg)
+
+def sha256(input):
+    return hashlib.sha256(input).hexdigest()
+
+def calculate(*args):
+    return sha256(" ".join(map(transform_arg, args)))
 

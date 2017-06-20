@@ -26,13 +26,13 @@ class Block(object):
         elif previous_block.hash != self.previous_hash:
             logging.error("Invalid previous hash")
             return False
-        elif not self.is_valid():
+        elif not self.is_valid_hash():
             logging.error("Invalid hash, block hash %s should be %s" % (self.hash, self.calculate_hash()))
             return False
         return True
 
     @classmethod
     def get_genesis_block(cls):
-        logging.debug("Creating genesis block")
+        logging.debug("Generating the genesis block")
         return cls(0, "0", 1497922681, "Hello World", "e08ce3fe726b7ff79449d358e0b1019f088301152eddc89d8e4f9facdc6d0a9b");
 
