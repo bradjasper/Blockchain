@@ -1,9 +1,7 @@
-import hashlib
-import time
+import logging
 import datetime
 
-def calculate_hash(* args):
-    return hashlib.sha256(" ".join([str(arg) for arg in args if arg is not None])).hexdigest()
+import hashing
 
 class Block(object):
     def __init__(self, index, previous_hash, timestamp, data, hash):
@@ -13,25 +11,28 @@ class Block(object):
         self.data = data
         self.hash = hash
 
-    @classmethod
-    def get_genesis_block(cls):
-        return cls(0, "0", 1497922681, "Hello World", "e08ce3fe726b7ff79449d358e0b1019f088301152eddc89d8e4f9facdc6d0a9b");
+        self.readable_timestamp = datetime.datetime.fromtimestamp(self.timestamp).strftime('%Y-%m-%d %H:%M:%S')
 
-    def short_timestamp(self):
-        return datetime.datetime.fromtimestamp(self.timestamp).strftime('%Y-%m-%d %H:%M:%S')
+    def calculate_hash(self):
+        return hashing.calculate(self.index, self.previous_hash, self.timestamp, self.data)
 
-    def calculated_hash(self):
-        return calculate_hash(self.index, self.previous_hash, self.timestamp, self.data)
+    def is_valid_hash(self):
+        return self.hash == self.calculate_hash()
 
-    def is_valid(self):
-        if self.hash != self.calculated_hash():
+    def is_valid_block(self, previous_block):
+        if (previous_block.index + 1) != self.index:
+            logging.error("Invalid index")
+            return False
+        elif previous_block.hash != self.previous_hash:
+            logging.error("Invalid previous hash")
+            return False
+        elif not self.is_valid():
+            logging.error("Invalid hash, block hash %s should be %s" % (self.hash, self.calculate_hash()))
             return False
         return True
 
     @classmethod
-    def generate_block(cls, previous_block, block_data=None):
-        next_index = previous_block.index + 1
-        next_timestamp = int(time.time())
-        next_hash = calculate_hash(next_index, previous_block.hash, next_timestamp, block_data)
-        return cls(next_index, previous_block.hash, next_timestamp, block_data, next_hash)
+    def get_genesis_block(cls):
+        logging.debug("Creating genesis block")
+        return cls(0, "0", 1497922681, "Hello World", "e08ce3fe726b7ff79449d358e0b1019f088301152eddc89d8e4f9facdc6d0a9b");
 
