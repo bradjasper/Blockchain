@@ -3,6 +3,8 @@ import time
 import hashing
 from block import Block
 
+# TODO: PoW
+
 def generate_block(previous_block, block_data=None):
     next_index = previous_block.index + 1
     next_timestamp = int(time.time())
