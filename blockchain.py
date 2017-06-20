@@ -3,6 +3,15 @@ import time
 import json
 import datetime
 
+# TODO
+# Clean up code
+# Make it more obvious how stuff interacts
+# Clean up hashing concepts, don't like args
+# Add logging
+# Think about services...ChainValidator
+# - P2P
+# - PoW
+
 def calculate_hash(* args):
     return hashlib.sha256(" ".join([str(arg) for arg in args if arg is not None])).hexdigest()
 

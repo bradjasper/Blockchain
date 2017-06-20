@@ -1,10 +1,8 @@
 # Blockchain
 
-A simple blockchain that aims to teach, written in Python. Inspired by NaiveChain.
+A simple blockchain for learning core concepts, written in Python.
 
-Used to demonstrate the main concepts with blockchains, not for serious use.
-
-# TODO
-- P2P
-- PoW
+## Inspired by
+* https://github.com/zack-bitcoin
+* https://github.com/lhartikk
 
